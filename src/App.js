@@ -1,12 +1,19 @@
-import React from 'react';
-import Tasks from './Components/Tasks';
+import React, { useState } from 'react';
+import List from './Components/List';
+import Form from './Components/Form';
 
- function App() {
-    return (
-      <>
-      <Tasks />
-    </>
-    )
+export default function App() {
+  const [itemsList, setItemsList] = useState([]);
+  
+  function addItemToList(newItem) {
+    setItemsList([...itemsList, newItem])
   }
-
-  export default App;
+  
+  return (
+    <div>
+      <h1>ToDo List</h1>
+      <Form onAddItem={addItemToList}/>
+      <List itemsList={itemsList} />
+    </div>
+  );
+}
