@@ -1,19 +1,41 @@
 import React, { useState } from 'react';
-import List from './Components/List';
-import Form from './Components/Form';
 
 export default function App() {
-  const [itemsList, setItemsList] = useState([]);
-  
-  function addItemToList(newItem) {
-    setItemsList([...itemsList, newItem])
+  let savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  const [task, setTask] = useState('');
+  const [tasksList, setTasksList] = useState([]);
+
+  function handleChange(event) {
+    const inputTask = event.target.value;
+    
+    setTask(inputTask);
   }
-  
+
+  function handleAddTask(event) {
+    event.preventDefault();
+    if (task) {
+
+      setTasksList([...tasksList, task]);
+
+      setTask("");
+
+      savedTasks.push(task)
+      localStorage.setItem('tasks', JSON.stringify(savedTasks));
+    }
+  }
+
   return (
     <div>
-      <h1>ToDo List</h1>
-      <Form onAddItem={addItemToList}/>
-      <List itemsList={itemsList} />
+      <form onSubmit={handleAddTask}>
+        <h1>Agenda</h1>
+
+        <input type="text" onChange={(event) => handleChange(event)} value={task} />
+        <button type="submit">Adicionar</button>
+      </form>
+
+      {savedTasks.map((task, index) => (
+        <div key={index} >{task}</div>
+      ))}
     </div>
-  );
+  )
 }
