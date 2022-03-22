@@ -5,7 +5,6 @@ export default function App() {
 
   let savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
   const [task, setTask] = useState('');
-  // const [tasksList, setTasksList] = useState([]);
 
   function handleChange(event) {
     const inputTask = event.target.value;
@@ -15,7 +14,6 @@ export default function App() {
   function handleAddTask(event) {
     event.preventDefault();
     if (task) {
-      // setTasksList([...tasksList, task]);
       setTask("");
       savedTasks.push(task)
       localStorage.setItem('tasks', JSON.stringify(savedTasks));
@@ -23,14 +21,25 @@ export default function App() {
   }
 
   function clearTasks() {
-    localStorage.clear('tasks');
+    localStorage.setItem('tasks', JSON.stringify([]));
     setTask([]);
   }
 
   function removeTask(event) {
-    event.target.parentNode.remove();
-    // console.log(savedTasks);
+    let auxArray = [];
+    let liTasks = event.target.parentNode.parentNode.children;
+    console.log(liTasks);
+    for (let i = 0; i < liTasks.length; i++) {
+      if (liTasks.length <= 1) {
+        event.target.parentNode.remove();
+        localStorage.setItem('tasks', JSON.stringify([]));
+      } else {
+      event.target.parentNode.remove();
+      auxArray.push(liTasks[i].innerText)
+      localStorage.setItem('tasks', JSON.stringify(auxArray));
+    }
   }
+}
 
   return (
     <div className="agenda">
@@ -50,7 +59,7 @@ export default function App() {
         >
           {task}
           {/* <button onclick={completeTask}>Check</button> */}
-          <button className ="remove-button" onClick={removeTask}>Remove</button>
+          <input type="button" className ="remove-button" value="Delete" onClick={removeTask} />
           </li>
       ))}
       </ul>
